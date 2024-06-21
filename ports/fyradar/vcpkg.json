@@ -1,0 +1,64 @@
+{
+  "name": "fyradar",
+  "version": "1.0.0",
+  "description": "fyradar is a private software library load feiyue yuntai and sick radar!!!",
+  "supports": "!uwp & !xbox",
+  "dependencies": [
+		"boost-thread",
+		"boost-asio",
+		"boost-math",
+		"boost-system",
+		"boost-filesystem",
+		"boost-any",
+		"boost-lambda",
+		"pthreads",
+		"eigen3",
+		{
+		  "name": "vcpkg-cmake",
+		  "host": true
+		},
+		{
+		  "name": "vcpkg-cmake-config",
+		  "host": true
+		}
+	],
+  "builtin-baseline": "898b728edc5e0d12b50015f9cd18247c4257a3eb",
+	"overrides": [
+		{
+			"name": "boost-thread",
+			"version": "1.77.0"
+		},
+		{
+			"name": "boost-asio",
+			"version": "1.77.0"
+		},
+		{
+			"name": "boost-math",
+			"version": "1.77.0"
+		},
+		{
+			"name": "boost-filesystem",
+			"version": "1.77.0"
+		},
+		{
+			"name": "boost-system",
+			"version": "1.77.0"
+		},
+		{
+			"name": "boost-any",
+			"version": "1.77.0"
+		},
+		{
+			"name": "boost-lambda",
+			"version": "1.77.0"
+		},
+		{
+			"name": "pthreads",
+			"version": "3.0.0#14"
+		},
+		{
+			"name": "eigen3",
+			"version": "3.4.0#4"
+		}
+	]
+}
