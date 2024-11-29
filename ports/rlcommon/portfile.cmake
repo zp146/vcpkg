@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL "ssh://git@10.50.135.26:8022/Mpp/RlCommon.git"
-    REF "950793a38b42da52d10772f82180d21d28f7056d"
+    REF "93dd937b8fb96b012dc1ba23d852d81f1bb4547a"
 )
 
 vcpkg_cmake_configure(
