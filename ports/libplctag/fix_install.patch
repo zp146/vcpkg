@@ -1,0 +1,44 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4d64d1a..040fa4e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -608,21 +608,29 @@ if(ANDROID_BUILD)
+ endif(ANDROID_BUILD)
+ 
+ # for installation
+-if(UNIX)
+-	install(TARGETS plctag_dyn DESTINATION lib${LIB_SUFFIX})
+-	install(TARGETS plctag_static DESTINATION lib${LIB_SUFFIX})
+-elseif(WIN32)
+-	install(TARGETS plctag_dyn DESTINATION lib${LIB_SUFFIX})
+-	install(TARGETS plctag_static DESTINATION lib${LIB_SUFFIX})
+-endif()
++install(
++  TARGETS plctag_dyn
++  EXPORT libplctagConfig
++  RUNTIME DESTINATION bin
++  LIBRARY DESTINATION lib
++  ARCHIVE DESTINATION lib
++)
++install(
++  TARGETS plctag_static
++  EXPORT libplctagConfig
++  RUNTIME DESTINATION bin
++  LIBRARY DESTINATION lib
++  ARCHIVE DESTINATION lib
++)
++install(EXPORT libplctagConfig DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+ 
+ if(ANDROID_BUILD)
+     message("Skipping package config and header file copy for Android build.")
+ else()
+     install(FILES "${lib_SRC_PATH}/libplctag.h" DESTINATION include)
+-    if(EXISTS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libplctag.pc")
+-        install(FILES "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libplctag.pc" DESTINATION "lib${LIB_SUFFIX}/pkgconfig")
+-    endif()
++    #if(EXISTS "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libplctag.pc")
++        #install(FILES "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libplctag.pc" DESTINATION "lib${LIB_SUFFIX}/pkgconfig")
++    #endif()
+ endif(ANDROID_BUILD)
+ 
+ macro(print_all_variables)
