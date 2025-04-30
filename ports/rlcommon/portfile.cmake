@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
-    URL "git@10.50.144.162:rlsyb/rl-autowheel/rlcommon.git"
-    REF "8cbc9537b2de2c6f755ffae61e4ec52fef3e5c4e"
+    URL "git@ssh.dev.azure.com:v3/ChuShang/RlCommon/RlCommon"
+    REF "6a8a0878990c48333df2d77475f8547282228dcd"
 )
 
 vcpkg_cmake_configure(
