@@ -3036,10 +3036,6 @@
       "baseline": "2021-02-21",
       "port-version": 2
     },
-	"fyradar": {
-      "baseline": "1.0.0",
-      "port-version": 0
-    },
     "g2o": {
       "baseline": "2024-12-14",
       "port-version": 3
