@@ -12,18 +12,49 @@ vcpkg_from_github(
 file(GLOB TCLSH_CMD
 		${CURRENT_INSTALLED_DIR}/tools/tcl/bin/tclsh*${VCPKG_HOST_EXECUTABLE_SUFFIX}
 )
+
+# Check if TCLSH_CMD is empty and provide fallback
+if(NOT TCLSH_CMD)
+    message(WARNING "No tclsh found in ${CURRENT_INSTALLED_DIR}/tools/tcl/bin/, trying system tclsh")
+    find_program(TCLSH_CMD tclsh)
+    if(NOT TCLSH_CMD)
+        message(FATAL_ERROR "tclsh not found. Please install tcl package first.")
+    endif()
+endif()
+
+# Take the first match if multiple found
+list(GET TCLSH_CMD 0 TCLSH_CMD)
 file(TO_NATIVE_PATH "${TCLSH_CMD}" TCLSH_CMD)
 file(TO_NATIVE_PATH "${SOURCE_PATH}" SOURCE_PATH_NAT)
 
 # Determine TCL version (e.g. [path]tclsh90sx.exe -> 90 or tclsh8.6 -> 8.6)
-string(REGEX REPLACE "^.*tclsh" "" TCLVERSION "${TCLSH_CMD}")
-if(WIN32)
-    string(REGEX REPLACE "[A-Za-z]*${VCPKG_HOST_EXECUTABLE_SUFFIX}$" "" TCLVERSION "${TCLVERSION}")
+if(TCLSH_CMD)
+    message(STATUS "Found TCLSH_CMD: ${TCLSH_CMD}")
+    string(REGEX REPLACE "^.*tclsh" "" TCLVERSION "${TCLSH_CMD}")
+    message(STATUS "TCLVERSION after first regex: ${TCLVERSION}")
+    
+    # Check if VCPKG_HOST_EXECUTABLE_SUFFIX is defined and not empty
+    if(DEFINED VCPKG_HOST_EXECUTABLE_SUFFIX AND VCPKG_HOST_EXECUTABLE_SUFFIX)
+        message(STATUS "VCPKG_HOST_EXECUTABLE_SUFFIX: '${VCPKG_HOST_EXECUTABLE_SUFFIX}'")
+        if(VCPKG_TARGET_IS_WINDOWS)
+            if(TCLVERSION MATCHES ".*${VCPKG_HOST_EXECUTABLE_SUFFIX}$")
+                string(REGEX REPLACE "[A-Za-z]*${VCPKG_HOST_EXECUTABLE_SUFFIX}$" "" TCLVERSION "${TCLVERSION}")
+            endif()
+        else()
+            if(TCLVERSION MATCHES ".*${VCPKG_HOST_EXECUTABLE_SUFFIX}$")
+                string(REGEX REPLACE "${VCPKG_HOST_EXECUTABLE_SUFFIX}$" "" TCLVERSION "${TCLVERSION}")
+            endif()
+        endif()
+    else()
+        message(STATUS "VCPKG_HOST_EXECUTABLE_SUFFIX is empty or undefined, skipping suffix removal")
+    endif()
+    message(STATUS "Final TCLVERSION: ${TCLVERSION}")
 else()
-    string(REGEX REPLACE "${VCPKG_HOST_EXECUTABLE_SUFFIX}$" "" TCLVERSION "${TCLVERSION}")
+    set(TCLVERSION "8.6")
+    message(WARNING "Could not determine TCL version, using default: ${TCLVERSION}")
 endif()
 
-if(WIN32)
+if(CMAKE_HOST_WIN32)
     # Windows-specific build using nmake
     find_program(NMAKE nmake REQUIRED)
     
@@ -50,18 +81,25 @@ if(WIN32)
 else()
     # Unix-like systems (Linux/macOS) using make
     find_program(MAKE make REQUIRED)
-    
+
+    # 先运行 ./configure
+    vcpkg_execute_required_process(
+        COMMAND ./configure
+        WORKING_DIRECTORY "${SOURCE_PATH}"
+        LOGNAME configure-${TARGET_TRIPLET}
+    )
+
     # Set environment variables for Unix systems
     set(ENV{CFLAGS} "-I${CURRENT_INSTALLED_DIR}/include")
     set(ENV{LDFLAGS} "-L${CURRENT_INSTALLED_DIR}/lib")
     set(ENV{TCLSH_CMD} "${TCLSH_CMD}")
     set(ENV{TCLVERSION} "${TCLVERSION}")
     set(ENV{ORIGINAL_SRC} "${SOURCE_PATH_NAT}")
-    
+
     # Creating amalgamation files
     message(STATUS "Pre-building ${TARGET_TRIPLET}")
     vcpkg_execute_required_process(
-        COMMAND ${MAKE} clean tcl
+        COMMAND ${MAKE} clean libtclsqlite3.la
         WORKING_DIRECTORY "${SOURCE_PATH}"
         LOGNAME pre-build-${TARGET_TRIPLET}
     )
