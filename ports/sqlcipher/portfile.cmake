@@ -8,9 +8,6 @@ vcpkg_from_github(
     HEAD_REF master
 )
 
-# Don't use vcpkg_build_nmake, because it doesn't handle nmake targets correctly.
-find_program(NMAKE nmake REQUIRED)
-
 # Find tclsh Executable needed for Amalgamation of SQLite
 file(GLOB TCLSH_CMD
 		${CURRENT_INSTALLED_DIR}/tools/tcl/bin/tclsh*${VCPKG_HOST_EXECUTABLE_SUFFIX}
@@ -22,26 +19,50 @@ file(TO_NATIVE_PATH "${SOURCE_PATH}" SOURCE_PATH_NAT)
 string(REGEX REPLACE ^.*tclsh "" TCLVERSION ${TCLSH_CMD})
 string(REGEX REPLACE [A-Za-z]*${VCPKG_HOST_EXECUTABLE_SUFFIX}$ "" TCLVERSION ${TCLVERSION})
 
-list(APPEND NMAKE_OPTIONS
-		TCLSH_CMD="${TCLSH_CMD}"
-		TCLVERSION=${TCLVERSION}
-		ORIGINAL_SRC="${SOURCE_PATH_NAT}"
-		EXT_FEATURE_FLAGS=-DSQLITE_TEMP_STORE=2\ -DSQLITE_HAS_CODEC
-		LTLIBS=libcrypto.lib
+if(WIN32)
+    # Windows-specific build using nmake
+    find_program(NMAKE nmake REQUIRED)
+    
+    list(APPEND NMAKE_OPTIONS
+        TCLSH_CMD="${TCLSH_CMD}"
+        TCLVERSION=${TCLVERSION}
+        ORIGINAL_SRC="${SOURCE_PATH_NAT}"
+        EXT_FEATURE_FLAGS=-DSQLITE_TEMP_STORE=2\ -DSQLITE_HAS_CODEC
+        LTLIBS=libcrypto.lib
         LTLIBPATHS=/LIBPATH:"${CURRENT_INSTALLED_DIR}/lib/"
-)
+    )
 
-set(ENV{INCLUDE} "${CURRENT_INSTALLED_DIR}/include;$ENV{INCLUDE}")
+    set(ENV{INCLUDE} "${CURRENT_INSTALLED_DIR}/include;$ENV{INCLUDE}")
 
-# Creating amalgamation files
-message(STATUS "Pre-building ${TARGET_TRIPLET}")
-vcpkg_execute_required_process(
-	COMMAND ${NMAKE} -f Makefile.msc /A /NOLOGO clean tcl
-	${NMAKE_OPTIONS}
-	WORKING_DIRECTORY "${SOURCE_PATH}"
-	LOGNAME pre-build-${TARGET_TRIPLET}
-)
-message(STATUS "Pre-building ${TARGET_TRIPLET} done")
+    # Creating amalgamation files
+    message(STATUS "Pre-building ${TARGET_TRIPLET}")
+    vcpkg_execute_required_process(
+        COMMAND ${NMAKE} -f Makefile.msc /A /NOLOGO clean tcl
+        ${NMAKE_OPTIONS}
+        WORKING_DIRECTORY "${SOURCE_PATH}"
+        LOGNAME pre-build-${TARGET_TRIPLET}
+    )
+    message(STATUS "Pre-building ${TARGET_TRIPLET} done")
+else()
+    # Unix-like systems (Linux/macOS) using make
+    find_program(MAKE make REQUIRED)
+    
+    # Set environment variables for Unix systems
+    set(ENV{CFLAGS} "-I${CURRENT_INSTALLED_DIR}/include")
+    set(ENV{LDFLAGS} "-L${CURRENT_INSTALLED_DIR}/lib")
+    set(ENV{TCLSH_CMD} "${TCLSH_CMD}")
+    set(ENV{TCLVERSION} "${TCLVERSION}")
+    set(ENV{ORIGINAL_SRC} "${SOURCE_PATH_NAT}")
+    
+    # Creating amalgamation files
+    message(STATUS "Pre-building ${TARGET_TRIPLET}")
+    vcpkg_execute_required_process(
+        COMMAND ${MAKE} clean tcl
+        WORKING_DIRECTORY "${SOURCE_PATH}"
+        LOGNAME pre-build-${TARGET_TRIPLET}
+    )
+    message(STATUS "Pre-building ${TARGET_TRIPLET} done")
+endif()
 
 # The rest of the build process with the CMakeLists.txt is merely a copy of sqlite3
 
