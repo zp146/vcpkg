@@ -15,9 +15,13 @@ file(GLOB TCLSH_CMD
 file(TO_NATIVE_PATH "${TCLSH_CMD}" TCLSH_CMD)
 file(TO_NATIVE_PATH "${SOURCE_PATH}" SOURCE_PATH_NAT)
 
-# Determine TCL version (e.g. [path]tclsh90sx.exe -> 90)
-string(REGEX REPLACE ^.*tclsh "" TCLVERSION ${TCLSH_CMD})
-string(REGEX REPLACE [A-Za-z]*${VCPKG_HOST_EXECUTABLE_SUFFIX}$ "" TCLVERSION ${TCLVERSION})
+# Determine TCL version (e.g. [path]tclsh90sx.exe -> 90 or tclsh8.6 -> 8.6)
+string(REGEX REPLACE "^.*tclsh" "" TCLVERSION "${TCLSH_CMD}")
+if(WIN32)
+    string(REGEX REPLACE "[A-Za-z]*${VCPKG_HOST_EXECUTABLE_SUFFIX}$" "" TCLVERSION "${TCLVERSION}")
+else()
+    string(REGEX REPLACE "${VCPKG_HOST_EXECUTABLE_SUFFIX}$" "" TCLVERSION "${TCLVERSION}")
+endif()
 
 if(WIN32)
     # Windows-specific build using nmake
