@@ -31,5 +31,11 @@
     "tool": {
       "description": "sqlite3 executable"
     }
-  }
+  },
+  "overrides": [
+		{
+			"name": "openssl",
+			"version": "3.3.0"
+		}
+	]
 }
