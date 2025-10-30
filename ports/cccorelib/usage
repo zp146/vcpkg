@@ -1,0 +1,4 @@
+The package cccorelib provides CMake targets:
+
+find_package(CCCoreLib CONFIG REQUIRED)
+target_link_libraries(main PRIVATE CCCoreLib::CCCoreLib)
