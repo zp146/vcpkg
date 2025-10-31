@@ -1,32 +1,46 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL "git@github.com:zp146/CCCoreLib.git"
-    REF "126e2605c75a5855b40624cefff9336ebabdce91"
+    REF "0f7d944b02203926ed47669058435ac055147a09"
 )
 
-# 手动下载 nanoflann
-vcpkg_from_github(
-    OUT_SOURCE_PATH NANOFLANN_SOURCE_PATH
-    REPO jlblancoc/nanoflann
-    REF v1.5.0
-    SHA512 2248EED37872737C1F3C031E65D2F892024E35AA81CCF14CF8222289CFE12B5CA3FE461749E060FF822CA9E40DD9CB918216468C1343A42305F7ADF780888C50
+# 映射 features -> CMake 选项（默认 OFF，避免强制安装）
+vcpkg_check_features(
+    OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        cgal         CCCORELIB_USE_CGAL
+        tbb          CCCORELIB_USE_TBB
+        qtconcurrent CCCORELIB_USE_QT_CONCURRENT
 )
 
-# 复制 nanoflann 到正确位置
-file(COPY "${NANOFLANN_SOURCE_PATH}/" DESTINATION "${SOURCE_PATH}/extern/nanoflann")
+# 共享/静态库根据 vcpkg 链接方式设置
+if(VCPKG_LIBRARY_LINKAGE STREQUAL "static")
+    set(_CCCORELIB_SHARED OFF)
+else()
+    set(_CCCORELIB_SHARED ON)
+endif()
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
-    OPTIONS 
+    OPTIONS
+        -DCCCORELIB_SHARED=${_CCCORELIB_SHARED}
+        ${FEATURE_OPTIONS}
 )
 
 vcpkg_cmake_install()
 vcpkg_copy_pdbs()
-vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake)
 
-# Handle copyright
+# 如果项目安装到 lib/cmake/CCCoreLib（当前代码默认），请用这行：
+vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/CCCoreLib PACKAGE_NAME CCCoreLib)
+
+# 如果你按我之前建议改为 share/CCCoreLib，则改为：
+# vcpkg_cmake_config_fixup(CONFIG_PATH share/CCCoreLib PACKAGE_NAME CCCoreLib)
+
+# 版权
 vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE.txt")
 
+# 清理
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
-# 安装使用说明
+
+# 使用说明
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
