@@ -3,29 +3,29 @@
   "version": "1.0.0",
   "description": "This library provides data structures and algorithms for working with 3D point cloud data.",
   "supports": "!uwp & !xbox",
-  "dependencies": [
-		"qt5-base",
-		"cgal",
-		"gmp",
-		"tbb",
-		{
-		  "name": "vcpkg-cmake",
-		  "host": true
-		},
-		{
-		  "name": "vcpkg-cmake-config",
-		  "host": true
-		}
-  ],
   "builtin-baseline": "bcf3d00d2116056fda0ce47615f6074ffecb7524",
-	"overrides": [
-		{
-			"name": "qt5-base",
-			"version": "5.15.14"
-		},
-		{
-			"name": "gmp",
-			"version": "6.3.0#2"
-		}
-	]
+  "dependencies": [
+    "cgal",
+    "gmp",
+    "qt5-base",
+    "tbb",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ],
+  "overrides": [
+    {
+      "name": "qt5-base",
+      "version": "5.15.14"
+    },
+    {
+      "name": "gmp",
+      "version": "6.3.0#2"
+    }
+  ]
 }
