@@ -1,12 +1,12 @@
 {
   "name": "cccorelib",
-  "version": "1.0.0",
-  "description": "This library provides data structures and algorithms for working with 3D point cloud data.",
-  "supports": "!uwp & !xbox",
+  "version-string": "1.0",
+  "description": "Core CloudCompare data structures & algorithms for handling point clouds",
+  "homepage": "https://github.com/zp146/CCCoreLib",
   "builtin-baseline": "bcf3d00d2116056fda0ce47615f6074ffecb7524",
   "dependencies": [
     "cgal",
-    "gmp",
+    "nanoflann",
     "qt5-base",
     "tbb",
     {
@@ -26,6 +26,14 @@
     {
       "name": "gmp",
       "version": "6.3.0#2"
+    },
+    {
+      "name": "tbb",
+      "version": "2021.13.0"
+    },
+    {
+      "name": "nanoflann",
+      "version": "1.5.5"
     }
   ]
 }
