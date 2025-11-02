@@ -2,16 +2,16 @@ vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL "git@github.com:zp146/CCCoreLib.git"
     REF "0ca6b68b6391ae99bf8c79116286ef0b8a289219"
+    HEAD_REF master
 )
 
 # 映射 features -> CMake 选项（默认 OFF，避免强制安装）
-#vcpkg_check_features(
-#   OUT_FEATURE_OPTIONS FEATURE_OPTIONS
-#    FEATURES
-#        cgal         CCCORELIB_USE_CGAL
-#        tbb          CCCORELIB_USE_TBB
-#        qtconcurrent CCCORELIB_USE_QT_CONCURRENT
-#)
+vcpkg_check_features(
+    OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        tbb          CCCORELIB_USE_TBB
+        qtconcurrent CCCORELIB_USE_QT_CONCURRENT
+)
 
 # 共享/静态库根据 vcpkg 链接方式设置
 if(VCPKG_LIBRARY_LINKAGE STREQUAL "static")
@@ -28,15 +28,14 @@ vcpkg_cmake_configure(
 )
 
 vcpkg_cmake_install()
-ports/ccfitsvcpkg_copy_pdbs()
+vcpkg_copy_pdbs()
 
 # 如果项目安装到 lib/cmake/CCCoreLib（当前代码默认），请用这行：
 vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/CCCoreLib PACKAGE_NAME CCCoreLib)
-# 安装转发入口（保障 share/cccorelib 下有标准入口）
-#file(INSTALL "${CURRENT_PORT_DIR}/vcpkg-port-config.cmake"
-#     DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
+
 # 如果你按我之前建议改为 share/CCCoreLib，则改为：
 # vcpkg_cmake_config_fixup(CONFIG_PATH share/CCCoreLib PACKAGE_NAME CCCoreLib)
+
 # 版权
 vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/LICENSE.txt")
 
