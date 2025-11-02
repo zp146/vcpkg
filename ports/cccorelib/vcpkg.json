@@ -19,7 +19,7 @@
     },
      { "name": "gmp" }
   ],
-  "builtin-baseline": "5f7d5346932a007ad7a524ad40281472110dadc3",
+  "builtin-baseline": "bcf3d00d2116056fda0ce47615f6074ffecb7524",
   "overrides": [
     { "name": "cgal", "version": "5.6.1" },
     { "name": "nanoflann", "version": "1.5.5" },

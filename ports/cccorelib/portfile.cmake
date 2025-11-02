@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL "git@github.com:zp146/CCCoreLib.git"
-    REF "0ca6b68b6391ae99bf8c79116286ef0b8a289219"
+    REF "d1ff28877e76bfdcc6b0d889aa4f1b0cabb8727f"
     HEAD_REF master
 )
 
@@ -31,7 +31,7 @@ vcpkg_cmake_install()
 vcpkg_copy_pdbs()
 
 # 如果项目安装到 lib/cmake/CCCoreLib（当前代码默认），请用这行：
-vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/CCCoreLib PACKAGE_NAME CCCoreLib)
+vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake)
 
 # 如果你按我之前建议改为 share/CCCoreLib，则改为：
 # vcpkg_cmake_config_fixup(CONFIG_PATH share/CCCoreLib PACKAGE_NAME CCCoreLib)
