@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL "git@github.com:zp146/CCCoreLib.git"
-    REF "d1ff28877e76bfdcc6b0d889aa4f1b0cabb8727f"
+    REF "06f558e66968927276a0f80d6bd33c6056e8a308"
     HEAD_REF master
 )
 
@@ -9,6 +9,7 @@ vcpkg_from_git(
 vcpkg_check_features(
     OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     FEATURES
+        cgal         CCCORELIB_USE_CGAL
         tbb          CCCORELIB_USE_TBB
         qtconcurrent CCCORELIB_USE_QT_CONCURRENT
 )
@@ -23,8 +24,10 @@ endif()
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS
-        -DCCCORELIB_SHARED=${_CCCORELIB_SHARED}
+        -DCCCORELIB_USE_QT_CONCURRENT=OFF
+        -DCCCORELIB_USE_CGAL=ON
         ${FEATURE_OPTIONS}
+        -DCCCORELIB_SHARED=${_CCCORELIB_SHARED}
 )
 
 vcpkg_cmake_install()
