@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL "git@github.com:zp146/CCCoreLib.git"
-    REF "06f558e66968927276a0f80d6bd33c6056e8a308"
+    REF "e8895ce5b2963c6d231cf8011d51270a230e90ea"
     HEAD_REF master
 )
 
