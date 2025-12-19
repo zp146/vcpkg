@@ -123,7 +123,7 @@ vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS ${FEATURE_OPTIONS} -DSQLCIPHER_VERSION=${VERSION}
     OPTIONS_DEBUG
-        -DSQLITE3_SKIP_TOOLS=ON
+        -DSQLITE3_SKIP_TOOLS=OFF
 )
 
 vcpkg_cmake_install()
