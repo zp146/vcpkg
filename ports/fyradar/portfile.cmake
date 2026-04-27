@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL "git@ssh.dev.azure.com:v3/ChuShang/FyRadar/FyRadar"
-    REF "6c262ae47c01c4d539cbf0b3fee6a455c366c958"
+    REF "0c12b0a3c7e579159fdb8c27ee1e9438fc02a1ca"
 )
 
 #file(COPY "${CMAKE_CURRENT_LIST_DIR}/CMakeHelpers.cmake" DESTINATION "${SOURCE_PATH}")
