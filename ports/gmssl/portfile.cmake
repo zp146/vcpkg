@@ -2,7 +2,7 @@ vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO gmssl/gmssl
     REF "v${VERSION}"
-    SHA512 0          # 先留 0，install 报错回填真实值
+    SHA512 7bab347d916973e65928cbc9925c0332234b1ae0fb53473110f8b584b61f28dba971a1aba10e6bde14c35d707f9c6b5cf1745ea92135c5c6c97dd809c26da18d
 )
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"

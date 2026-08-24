@@ -1,6 +1,6 @@
 {
   "name": "gmssl",
-  "version": "3.2.0",
+  "version": "3.1.1",
   "description": "国密算法库（SM2/SM3/SM4），本项目 GMEngine 引擎",
   "homepage": "https://github.com/gmssl/gmssl",
   "license": "BSD-3-Clause"
