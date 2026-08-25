@@ -13,8 +13,7 @@
       "host": true
     },
     {
-      "name": "openssl",
-      "version>=": "3.3.0"
+      "name": "openssl"
     },
     {
       "name": "gmssl"
