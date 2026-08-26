@@ -1,6 +1,6 @@
 {
   "name": "rlcommon",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "RlCommon is a private software library load the Rlproject By Must Need!!!",
   "supports": "!uwp & !xbox",
   "dependencies": [
