@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL "git@ssh.dev.azure.com:v3/ChuShang/RlCommon/RlCommon"
-    REF "7191c4e1aebc2926be397bbd3a172b0e58b169d1"
+    REF "a22c0ee69d661824dac3b0c0b9465a9272504767"
 )
 
 vcpkg_cmake_configure(
